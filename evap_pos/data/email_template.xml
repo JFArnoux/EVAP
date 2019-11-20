@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="email_template_loyalty_points" model="mail.template">
+            <field name="name">Points de fidélité</field>
+            <field name="model_id" ref="point_of_sale.model_pos_order"/>
+            <field name="email_from">${object.company_id.email | safe}</field>
+            <field name="email_to">${object.partner_id.email | safe}</field>
+            <field name="subject">Points de fidélité</field>
+            <field name="body_html" type="html">
+                <p><strong>Points de fidélité</strong></p>
+            </field>
+        </record>
+    </data>
+</odoo>

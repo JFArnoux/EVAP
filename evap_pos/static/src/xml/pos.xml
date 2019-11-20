@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates id="template" xml:space="preserve">
+
+    <!-- Prepare a list view to show products -->
+
+    <t t-extend="Product">
+        <t t-jquery="article" t-operation="replace">
+            <tr class="product-item" t-att-data-product-id="product.id" tabindex="0">
+                <td><t t-esc="product.display_name"/></td>
+                <td><t t-esc="widget.format_currency(product.get_price(pricelist, 1), 'Product Price')"/></td>
+            </tr>
+        </t>
+    </t>
+
+    <!-- Add heading  -->
+
+    <t t-extend="ProductListWidget">
+        <t t-jquery=".product-list" t-operation="replace">
+            <div class='product-list-container'>
+                <div class="product-list-scroller touch-scrollable">
+                    <table class="table product-list-table">
+                        <thead>
+                            <tr>
+                                <th>Nom</th>
+                                <th>Prix de vente</th>
+                            </tr>
+                        </thead>
+                        <tbody class="product-list"></tbody>
+                    </table>
+                </div>
+                <span class="placeholder-ScrollbarWidget" />
+            </div>
+        </t>
+    </t>
+</templates>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Extended Tree view -->
+
+    <record id="pos_order_line_tree_view_inherited" model="ir.ui.view">
+        <field name="name">pos.order.line.tree.view.inherited.evap.pos</field>
+        <field name="model">pos.order.line</field>
+        <field name="inherit_id" ref="point_of_sale.view_pos_order_line"/>
+        <field name="mode">primary</field>
+        <field name="arch" type="xml">
+            <field name="product_id" position="before">
+                <field name="order_id"/>
+                <field name="currency_id" invisible="1"/>
+            </field>
+
+            <field name="discount" position="replace"/>
+
+            <field name="price_unit" position="replace"/>
+
+            <field name="create_date" position="replace"/>
+        </field>
+    </record>
+
+    <!-- Pivot View -->
+
+    <record id="view_pos_order_line_pivot" model="ir.ui.view">
+        <field name="name">pos.order.line.pivot</field>
+        <field name="model">pos.order.line</field>
+        <field name="arch" type="xml">
+            <pivot string="Lines">
+                <field name="order_id" type="row"/>
+                <field name="product_id" type="row"/>
+                <field name="qty" type="measure"/>
+                <field name="price_subtotal" type="measure"/>
+                <field name="price_subtotal_incl" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+</odoo>

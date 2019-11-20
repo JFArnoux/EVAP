@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_invoice">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.basic_layout">
+                    <div class="page" style="font-size: 14px;">
+                        <div class="text-center"><h5>Bon de livraison &amp; Facture</h5></div>
+
+                        <table>
+                            <tr>
+                                <td width="10%"><strong>Magasin:</strong></td>
+                                <td width="25%"><span t-field="doc.user_id"/></td>
+                                <td/>
+                            </tr>
+                            <tr>
+                                <td width="10%"><strong>Date:</strong></td>
+                                <td width="25%"><t t-esc="doc.date_invoice"/></td>
+                                <td/>
+                            </tr>
+                            <tr>
+                                <td width="10%"><strong>N° Facture:</strong></td>
+                                <td width="25%"><t t-esc="doc.number"/></td>
+                                <td/>
+                            </tr>
+                            <tr>
+                                <td width="10%"><strong>Client:</strong></td>
+                                <td width="25%"><span t-field="doc.partner_id"/></td>
+                                <td/>
+                            </tr>
+                        </table>
+
+                        <br/>
+
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <th width="40%">Articles</th>
+                                    <th class="text-right" width="20%">Qté</th>
+                                    <th class="text-right" width="20%">Prix unit.</th>
+                                    <th class="text-right" width="20%">Total</th>
+                                </tr>
+
+                                <tr t-foreach="doc.invoice_line_ids" t-as="line">
+                                    <td width="40%"><span t-field="line.product_id"/></td>
+                                    <td class="text-right" width="20%"><span t-field="line.quantity"/></td>
+                                    <td class="text-right" width="20%">
+                                        <span t-field="line.price_unit"
+                                            t-options="{'widget': 'monetary', 'display_currency': line.currency_id}"/>
+                                    </td>
+                                    <td class="text-right" width="20%">
+                                        <span t-field="line.price_subtotal"
+                                            t-options="{'widget': 'monetary', 'display_currency': line.currency_id}"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td width="40%"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="text-right"><strong>Total</strong></td>
+                                    <td width="20%" class="text-right">
+                                        <strong>
+                                            <t t-esc="doc.amount_total"
+                                                t-options="{'widget': 'monetary', 'display_currency': doc.currency_id}"/>
+                                        </strong>
+                                    </td>
+                                </tr>
+                                <tr t-foreach="doc.tax_line_ids" t-as="tax">
+                                    <td width="40%"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="text-right">dont TVA - <t t-esc="tax.name"/></td>
+                                    <td width="20%" class="text-right">
+                                        <t t-esc="tax.amount_total"
+                                            t-options="{'widget': 'monetary', 'display_currency': doc.currency_id}"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="mt32 text-center">
+                            <t t-set="company" t-value="doc.company_id or res_company"/>
+                            <t t-esc="company.name"/> - <t t-esc="company.street"/><br/>
+                            <t t-esc="company.city"/> - <t t-esc="company.phone"/> - <t t-esc="company.website"/><br/>
+                            ICE : <t t-esc="company.ice"/>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- Report Action -->
+
+    <report
+        id="action_report_invoice"
+        model="account.invoice"
+        string="Bon de livraison &amp; Facture"
+        report_type="qweb-pdf"
+        name="evap_pos.report_invoice"
+        file="evap_pos.report_invoice"
+        paperformat="evap_pos.paperformat_invoice_report"
+    />
+</odoo>

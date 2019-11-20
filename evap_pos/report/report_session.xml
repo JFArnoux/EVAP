@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_pos_session">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.basic_layout">
+                    <div class="page">
+                        <h3 class="text-center">Journal de clotûre</h3>
+                        <table class="table mt8 mb32">
+                            <tr>
+                                <td width="20%"><strong>Magasin:</strong></td>
+                                <td width="30%"><span t-field="doc.user_id"/></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td width="20%"><strong>Date:</strong></td>
+                                <td width="30%"><t t-esc="doc.stop_at or doc.start_at"/></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td width="20%"><strong>Session:</strong></td>
+                                <td width="30%"><span t-field="doc.name"/></td>
+                                <td></td>
+                            </tr>
+                        </table>
+
+                        <h4>CA par mode de paiement</h4>
+                        <table class="table mt8 mb32">
+                            <t t-foreach="doc.statement_ids" t-as="statement">
+                                <tr>
+                                    <td width="20%" class="text-right"><strong>Espèces</strong></td>
+                                    <td width="30%" class="text-right">
+                                        <t t-esc="statement.balance_start" t-options="{'widget': 'monetary', 'display_currency': statement.currency_id}"/>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td width="20%" class="text-right"><strong>CB</strong></td>
+                                    <td width="30%" class="text-right">
+                                        <t t-esc="statement.total_entry_encoding" t-options="{'widget': 'monetary', 'display_currency': statement.currency_id}"/>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr></tr>
+                                <tr>
+                                    <td width="20%" class="text-right"><strong>Total</strong></td>
+                                    <td width="30%" class="text-right">
+                                        <t t-esc="statement.balance_end_real" t-options="{'widget': 'monetary', 'display_currency': statement.currency_id}"/>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                            </t>
+                        </table>
+
+                        <h4 class="mt16 mb16">Détail des remises</h4>
+                        <table class="table mt8 mb16">
+                            <thead>
+                                <th width="20%" class="text-right">Client</th>
+                                <th width="30%" class="text-right">Montant</th>
+                                <th></th>
+                            </thead>
+                            <tbody>
+                                <t t-set="discount_info" t-value="doc.get_discount_data()"/>
+                                <tr t-foreach="discount_info['vals']" t-as="data">
+                                    <td width="20%" class="text-right">
+                                        <t t-esc="data[0]"/>
+                                    </td>
+                                    <td width="30%" class="text-right">
+                                        <t t-esc="data[1]" t-options="{'widget': 'monetary', 'display_currency': data[2]}"/>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td width="20%" class="text-right"><strong>Total</strong></td>
+                                    <td width="30%" class="text-right">
+                                        <strong>
+                                            <t t-esc="discount_info['total_discount']"
+                                                t-options="{'widget': 'monetary', 'display_currency': discount_info['currency']}"
+                                            />
+                                        </strong>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h4 class="mt16 mb8">Paiement par point de fidélité</h4>
+                        <table class="table mt8 mb32">
+                            <thead>
+                                <th width="20%" class="text-right">Client</th>
+                                <th width="30%" class="text-right">Montant</th>
+                                <th></th>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="doc.order_ids.filtered('loyalty_points')" t-as="order">
+                                    <tr>
+                                        <td width="20%" class="text-right"><span t-field="order.partner_id"/></td>
+                                        <td width="30%" class="text-right">
+                                            <span t-field="order.loyalty_points" widget="integer"/>
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                </t>
+                                <tr>
+                                    <td width="20%" class="text-right"><strong>Total</strong></td>
+                                    <td width="30%" class="text-right">
+                                        <strong><t t-esc="sum([order.loyalty_points for order in doc.order_ids])"/></strong>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- Report Action -->
+
+    <report
+        id="action_report_pos_session"
+        model="pos.session"
+        string="Journal de clotûre"
+        report_type="qweb-pdf"
+        name="evap_pos.report_pos_session"
+        file="evap_pos.report_session"
+        paperformat="evap_pos.paperformat_session_report"
+        menu="False"
+    />
+</odoo>

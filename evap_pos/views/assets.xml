@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="assets_backend" name="evap_pos assets" inherit_id="point_of_sale.assets">
+        <xpath expr="." position="inside">
+        	<link rel="stylesheet" href="/evap_pos/static/src/scss/styles.scss"/>
+            <script type="text/javascript" src="/evap_pos/static/src/js/loyalty_points.js"></script>
+            <script type="text/javascript" src="/evap_pos/static/src/js/product_list_view.js"></script>
+        </xpath>
+    </template>
+</odoo>

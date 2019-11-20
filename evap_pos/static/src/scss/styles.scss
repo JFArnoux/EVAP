@@ -1,0 +1,38 @@
+$font-large: 15px;
+$height: 30px;
+$padding: 10px;
+
+.product-list-table {
+    width: inherit;
+
+    tr {
+        &:nth-child(odd) {
+            background: rgb(247, 247, 247);
+        }
+
+        th, td {
+            padding: $padding;
+
+            &:last-child {
+                text-align: right;
+            }
+        }
+    }
+
+    thead {
+        tr {
+            font-size: $font-large;
+            line-height: $height;
+
+            th {
+                text-align: left;
+            }
+        }
+    }
+}
+
+.product-item {
+    font-size: $font-large;
+    line-height: $height;
+    padding: $padding;
+}

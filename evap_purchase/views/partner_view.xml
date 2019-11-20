@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="partner_form_view_inherited_evap_purchase" model="ir.ui.view">
+        <field name="name">res.partner.form.inherited.evap.purchase</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <field name="property_supplier_payment_term_id" position="before">
+                <field name="property_purchase_currency_id" options="{'no_create': True, 'no_create_edit': True}"/>
+            </field>
+        </field>
+    </record>
+</odoo>
