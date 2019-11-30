@@ -27,6 +27,7 @@
                     <field name="customs_theoretical" class="text-right pull-right"/>
                     <field name="customs" class="text-right pull-right"/>
                     <field name="misc_costs" class="text-right pull-right"/>
+                    <field name="total_dh" class="text-right pull-right"/>
                 </group>
             </xpath>
 
