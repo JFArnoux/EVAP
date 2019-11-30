@@ -59,6 +59,19 @@ class PurchaseOrder(models.Model):
         """
     )
 
+    total_dh = fields.Float(
+        compute="_compute_amount_dh",
+        string="Total DH",
+        help="""
+            Total DH
+        """
+    )
+
+    @api.depends('amount_total', 'exchange_rate')
+    def _compute_amount_dh(self):
+        for order in self:
+            order.total_dh = self.amount_total * self.exchange_rate
+
     # @api.model
     # def fields_view_get(self, view_id=None, view_type='form', toolbar=False,
     #                     submenu=False):
