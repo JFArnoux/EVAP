@@ -9,7 +9,7 @@
                 <field name="discount_eva" widget="percentage"/>
             </xpath>
 
-            <xpath expr="//field[@name='order_line']//tree//field[@name='taxes_id']" position="attributes">
+            <!--<xpath expr="//field[@name='order_line']//tree//field[@name='taxes_id']" position="attributes">
                 <attribute name="attrs">{'readonly': [('has_same_currency', '=', False)]}</attribute>
             </xpath> -->
 
