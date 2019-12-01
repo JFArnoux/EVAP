@@ -67,6 +67,13 @@ class PurchaseOrder(models.Model):
         """
     )
 
+    discount_eva = fields.Float(
+        string="Taux de remise",
+        help="""
+            Taux de remise
+        """
+    )
+
     @api.depends('amount_total', 'exchange_rate')
     def _compute_amount_dh(self):
         for order in self:
@@ -234,6 +241,36 @@ class PurchaseOrderLine(models.Model):
             Marge / P.V. TTC
         """
     )
+
+    discount_eva = fields.Float(
+        compute="_compute_discount_eva",
+        string="Taux de remise",
+        help="""
+            Taux de remise
+        """
+    )
+
+    @api.depends('order_id.discount_eva')
+    def _compute_discount_eva(self):
+        for line in self:
+            discount = line.order_id.discount_eva
+            line.discount_eva = discount
+
+    @api.depends('product_qty', 'price_unit', 'taxes_id')
+    def _compute_amount(self):
+        for line in self:
+            vals = line._prepare_compute_all_values()
+            taxes = line.taxes_id.compute_all(
+                vals['price_unit'],
+                vals['currency_id'],
+                vals['product_qty'],
+                vals['product'],
+                vals['partner'])
+            line.update({
+                'price_tax': sum(t.get('amount', 0.0) for t in taxes.get('taxes', [])),
+                'price_total': taxes['total_included'],
+                'price_subtotal': taxes['total_excluded'] * (1 - line.discount_eva),
+            })
 
     # has_same_currency = fields.Boolean(
     #     compute="_compute_same_currency",
