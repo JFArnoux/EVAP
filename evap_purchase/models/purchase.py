@@ -73,11 +73,12 @@ class PurchaseOrder(models.Model):
             Taux de remise
         """
     )
-
+    
+    @api.one
     @api.depends('amount_total', 'exchange_rate')
     def _compute_amount_dh(self):
         for order in self:
-            order.total_dh = self.amount_total * self.exchange_rate
+            order.total_dh = self.amount_total * self.exchange_rate or False
 
     # @api.model
     # def fields_view_get(self, view_id=None, view_type='form', toolbar=False,
