@@ -275,7 +275,7 @@ class PurchaseOrderLine(models.Model):
     @api.multi
     def _compute_tax_id(self):
         for line in self:
-            if line.order_id.partner_id.property_purchase_currency_id.id != line.order_id.company_id.currency_id.id:
+            if line.order_id.partner_id.property_purchase_currency_id.name == line.order_id.company_id.currency_id.name:
                 fpos = line.order_id.fiscal_position_id or line.order_id.partner_id.property_account_position_id
                 # If company_id is set, always filter taxes by the company
                 taxes = line.product_id.supplier_taxes_id.filtered(lambda r: not line.company_id or r.company_id == line.company_id)
