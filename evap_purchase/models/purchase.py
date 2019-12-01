@@ -271,17 +271,6 @@ class PurchaseOrderLine(models.Model):
                 'price_total': taxes['total_included'],
                 'price_subtotal': taxes['total_excluded'] * (1 - line.discount_eva),
             })
-
-    @api.multi
-    def _compute_tax_id(self):
-        for line in self:
-            if line.order_id.partner_id.property_purchase_currency_id.name == line.order_id.company_id.currency_id.name:
-                fpos = line.order_id.fiscal_position_id or line.order_id.partner_id.property_account_position_id
-                # If company_id is set, always filter taxes by the company
-                taxes = line.product_id.supplier_taxes_id.filtered(lambda r: not line.company_id or r.company_id == line.company_id)
-                line.taxes_id = fpos.map_tax(taxes, line.product_id, line.order_id.partner_id) if fpos else taxes
-            else:
-                pass  
             
     # has_same_currency = fields.Boolean(
     #     compute="_compute_same_currency",
