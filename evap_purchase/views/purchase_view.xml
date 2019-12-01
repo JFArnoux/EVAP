@@ -5,8 +5,8 @@
         <field name="model">purchase.order</field>
         <field name="inherit_id" ref="purchase.purchase_order_form"/>
         <field name="arch" type="xml">
-            <!-- <xpath expr="//field[@name='order_line']//tree//field[@name='taxes_id']" position="before">
-                <field name="has_same_currency" invisible="1"/>
+             <xpath expr="//field[@name='order_line']//tree//field[@name='taxes_id']" position="before">
+                <field name="discount_eva" widget="percentage"/>
             </xpath>
 
             <xpath expr="//field[@name='order_line']//tree//field[@name='taxes_id']" position="attributes">
@@ -20,6 +20,7 @@
                     <field name="tva_theoretical" class="text-right pull-right"/>
                     <field name="tva" class="text-right pull-right"/>
                     <field name="transport_cost" class="text-right pull-right"/>
+                    <field name="discount_eva" widget="percentage"/>
                     <!-- <field name="transit_cost" class="text-right pull-right"/> -->
                 </group>
                 <group name="frais_right" string="Frais &amp; Taxes">
