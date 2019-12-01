@@ -243,6 +243,7 @@ class PurchaseOrderLine(models.Model):
     )
 
     discount_eva = fields.Float(
+        compute="_compute_discount_eva",
         string="Taux de remise",
         help="""
             Taux de remise
@@ -250,7 +251,7 @@ class PurchaseOrderLine(models.Model):
     )
 
     @api.depends('order_id.discount_eva')
-    def _compute_bill(self):
+    def _compute_discount_eva(self):
         for line in self:
             discount = line.order_id.discount_eva
             line.discount_eva = discount
